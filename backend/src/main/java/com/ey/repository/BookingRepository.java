@@ -1,10 +1,17 @@
 package com.ey.repository;
 
-import com.ey.entity.Booking;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ey.entity.Booking;
+
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findByUserUserId(Long userId);
+    List<Booking> findByUserId(Long userId);
+    List<Booking> findByRoom_Hostel_Owner_Id(Long ownerId);
+    List<Booking> findByRoomId(Long roomId);
+    
+    
 }

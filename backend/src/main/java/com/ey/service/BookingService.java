@@ -1,19 +1,17 @@
 package com.ey.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ey.entity.Booking;
+import com.ey.entity.Room;
+import com.ey.entity.User;
 import com.ey.repository.BookingRepository;
 import com.ey.repository.RoomRepository;
 import com.ey.repository.UserRepository;
 import com.ey.request.BookingRequest;
-import com.ey.request.RescheduleRequest;
-import com.ey.response.BookingResponse;
 
 @Service
 public class BookingService {
@@ -27,86 +25,76 @@ public class BookingService {
     @Autowired
     private RoomRepository roomRepository;
 
-    public BookingResponse createBooking(BookingRequest request) {
+    public Booking createBooking(BookingRequest request) {
+        Room room = roomRepository.findById(request.getRoomId())
+            .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        User user = userRepository.findById(request.getUserId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
         Booking booking = new Booking();
-        booking.setUser(userRepository.findById(request.getUserId()).orElse(null));
-        booking.setRoom(roomRepository.findById(request.getRoomId()).orElse(null));
+        booking.setUser(user);
+        booking.setRoom(room);
         booking.setCheckIn(request.getCheckIn());
         booking.setCheckOut(request.getCheckOut());
         booking.setStatus("requested");
 
+        // ✅ Mark the room as unavailable
+        room.setAvailable(false);
+        roomRepository.save(room);
+
+        return bookingRepository.save(booking);
+    }
+
+
+    public List<Booking> getBookingsByUser(Long userId) {
+        return bookingRepository.findByUserId(userId);
+    }
+
+    public Booking updateBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+        if (booking != null) {
+            booking.setStatus("cancelled");
+            bookingRepository.save(booking);
+
+            // ✅ Mark room as available again
+            Room room = booking.getRoom();
+            room.setAvailable(true);
+            roomRepository.save(room);
+        }
+    }
+
+
+    public List<Booking> getBookingsForOwner(Long ownerId) {
+        return bookingRepository.findByRoom_Hostel_Owner_Id(ownerId);
+    }
+    
+    public Booking rescheduleBooking(Long bookingId, BookingRequest request) {
+        Booking booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        booking.setCheckIn(request.getCheckIn());
+        booking.setCheckOut(request.getCheckOut());
+        booking.setStatus("rescheduled");
+
+        return bookingRepository.save(booking);
+    }
+    
+    public void approveBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        booking.setStatus("approved");
         bookingRepository.save(booking);
-        return convertToResponse(booking);
+    }
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
     }
 
-    public List<BookingResponse> getBookingsByUserId(Long userId) {
-        return bookingRepository.findByUserUserId(userId)
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
-    }
 
-    public BookingResponse getBookingById(Long id) {
-        Optional<Booking> booking = bookingRepository.findById(id);
-        return booking.map(this::convertToResponse).orElse(null);
-    }
 
-    public String cancelBooking(Long bookingId) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
-        if (bookingOpt.isEmpty()) return "Booking not found";
-
-        Booking booking = bookingOpt.get();
-        booking.setStatus("Cancelled");
-        bookingRepository.save(booking);
-        return "Booking cancelled successfully";
-    }
-
-    public String rescheduleBooking(Long bookingId, RescheduleRequest request) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
-        if (bookingOpt.isEmpty()) return "Booking not found";
-
-        Booking booking = bookingOpt.get();
-        booking.setCheckIn(request.getNewCheckIn());
-        booking.setCheckOut(request.getNewCheckOut());
-        booking.setStatus("Rescheduled");
-        bookingRepository.save(booking);
-        return "Booking rescheduled successfully";
-    }
-
-    public String getBookingStatus(Long bookingId) {
-        return bookingRepository.findById(bookingId)
-                .map(Booking::getStatus)
-                .orElse("Booking not found");
-    }
-
-    public String approveBooking(Long bookingId) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
-        if (bookingOpt.isEmpty()) return "Booking not found";
-
-        Booking booking = bookingOpt.get();
-        booking.setStatus("Approved");
-        bookingRepository.save(booking);
-        return "Booking approved successfully";
-    }
-
-    public String declineBooking(Long bookingId) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
-        if (bookingOpt.isEmpty()) return "Booking not found";
-
-        Booking booking = bookingOpt.get();
-        booking.setStatus("Declined");
-        bookingRepository.save(booking);
-        return "Booking declined successfully";
-    }
-
-    private BookingResponse convertToResponse(Booking booking) {
-        BookingResponse response = new BookingResponse();
-        response.setBookingId(booking.getBookingId());
-        response.setUserId(booking.getUser().getUserId());
-        response.setRoomId(booking.getRoom().getRoomId());
-        response.setCheckIn(booking.getCheckIn().toString());
-        response.setCheckOut(booking.getCheckOut().toString());
-        response.setStatus(booking.getStatus());
-        return response;
-    }
 }

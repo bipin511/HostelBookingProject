@@ -1,91 +1,39 @@
 package com.ey.entity;
 
+
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
 public class User {
 
-    @Id
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
-    private String name;
-    private String email;
-    private String phone;
+    private String username;
     private String password;
-    private String role; // seeker, owner, or admin
+    private String role; // "seeker", "owner", "admin"
 
-    // No-args constructor
     public User() {}
 
-    // All-args constructor
-    public User(Long userId, String name, String email, String phone, String password, String role) {
-        this.userId = userId;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
+    public User(String username, String password, String role) {
+        this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    // Getters and setters
-    public Long getUserId() {
-        return userId;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getName() {
-        return name;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
+

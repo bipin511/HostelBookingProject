@@ -1,73 +1,53 @@
 package com.ey.response;
 
-import com.ey.entity.Hostel;
+
 
 public class HostelResponse {
-
     private Long hostelId;
     private String name;
     private String location;
-    private String description; // New field for hostel description
-    private boolean isVerified;
+    private String description;
+    private Double rent;
+    private String amenities;
+    private String gender;
+    private boolean verified;
+    private String images;
+    private Double rating;
+    private Long ownerId;
 
     public HostelResponse() {}
 
-    public HostelResponse(Long hostelId, String name, String location, String description, boolean isVerified) {
-        this.hostelId = hostelId;
-        this.name = name;
-        this.location = location;
-        this.description = description;
-        this.isVerified = isVerified;
-    }
+    // Getters & Setters
+    public Long getHostelId() { return hostelId; }
+    public void setHostelId(Long hostelId) { this.hostelId = hostelId; }
 
-    public Long getHostelId() {
-        return hostelId;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setHostelId(Long hostelId) {
-        this.hostelId = hostelId;
-    }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public String getName() {
-        return name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Double getRent() { return rent; }
+    public void setRent(Double rent) { this.rent = rent; }
 
-    public String getLocation() {
-        return location;
-    }
+    public String getAmenities() { return amenities; }
+    public void setAmenities(String amenities) { this.amenities = amenities; }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 
-    public String getDescription() {
-        return description;
-    }
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getImages() { return images; }
+    public void setImages(String images) { this.images = images; }
 
-    public boolean isVerified() {
-        return isVerified;
-    }
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
 
-    public void setVerified(boolean isVerified) {
-        this.isVerified = isVerified;
-    }
-
-    // Mapper: Converts a Hostel entity to HostelResponse DTO
-    public static HostelResponse convertToHostelResponse(Hostel hostel) {
-        HostelResponse response = new HostelResponse();
-        response.setHostelId(hostel.getHostelId());
-        response.setName(hostel.getName());
-        response.setLocation(hostel.getLocation());
-        response.setDescription(hostel.getDescription()); // Maps description
-        response.setVerified(hostel.isVerified());
-        return response;
-    }
+    public Long getOwnerId() { return ownerId; }
+    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
 }

@@ -1,39 +1,31 @@
 package com.ey.controller;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.ey.response.BookingResponse;
-import com.ey.response.HostelResponse;
-import com.ey.service.AdminService;
+import com.ey.entity.Hostel;
+import com.ey.service.HostelService;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {
 
     @Autowired
-    private AdminService adminService;
+    private HostelService hostelService;
 
-    @GetMapping("/hostels/pending")
-    public List<HostelResponse> getPendingHostels() {
-        return adminService.getPendingHostels();
-    }
-
-    @PutMapping("/hostels/{hostelId}/verify")
-    public String verifyHostel(@PathVariable Long hostelId) {
-        return adminService.verifyHostel(hostelId);
-    }
-
-    @GetMapping("/bookings")
-    public List<BookingResponse> getAllBookings() {
-        return adminService.getAllBookings();
+    // Admin verifies a hostel listing
+    @PutMapping("/hostels/{id}/verify")
+    public ResponseEntity<Hostel> verifyHostel(@PathVariable Long id) {
+        Hostel hostel = hostelService.getHostelById(id);
+        if (hostel == null) {
+            return ResponseEntity.notFound().build();
+        }
+        hostel.setVerified(true);
+        hostel = hostelService.updateHostel(hostel);
+        return ResponseEntity.ok(hostel);
     }
 }

@@ -1,110 +1,54 @@
 package com.ey.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "rooms")
 public class Room {
 
-    @Id
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private Long id;
 
-    // Many rooms belong to one hostel
+    private String roomNumber;  // new
+    private String type;        // "AC", "Non-AC"
+    private Double rent;
+    private boolean available;
+    private String images;
+    private boolean occupied;
+
     @ManyToOne
     @JoinColumn(name = "hostel_id")
     private Hostel hostel;
-    
-    // Dedicated name field for the room
-    private String name;
-
-    private String roomType;   // e.g., "AC Single", "Non-AC Double"
-    private double rent;
-    private boolean availability;
-    
-    // You can store amenities as a comma-separated string
-    private String amenities;
 
     public Room() {}
 
-    public Room(Long roomId, Hostel hostel, String name, String roomType, double rent, boolean availability, String amenities) {
-        this.roomId = roomId;
-        this.hostel = hostel;
-        this.name = name;
-        this.roomType = roomType;
-        this.rent = rent;
-        this.availability = availability;
-        this.amenities = amenities;
-    }
-
     // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getRoomId() {
-        return roomId;
-    }
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
-    }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public Hostel getHostel() {
-        return hostel;
-    }
+    public Double getRent() { return rent; }
+    public void setRent(Double rent) { this.rent = rent; }
 
-    public void setHostel(Hostel hostel) {
-        this.hostel = hostel;
-    }
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 
-    public String getName() {
-        return name;
-    }
+    public String getImages() { return images; }
+    public void setImages(String images) { this.images = images; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public boolean isOccupied() { return occupied; }
+    public void setOccupied(boolean occupied) { this.occupied = occupied; }
 
-    public String getRoomType() {
-        return roomType;
-    }
-
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
-    }
-
-    public double getRent() {
-        return rent;
-    }
-
-    public void setRent(double rent) {
-        this.rent = rent;
-    }
-
-    public boolean isAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
-    public String getAmenities() {
-        return amenities;
-    }
-
-    public void setAmenities(String amenities) {
-        this.amenities = amenities;
-    }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "roomId=" + roomId +
-                ", hostel=" + hostel +
-                ", name='" + name + '\'' +
-                ", roomType='" + roomType + '\'' +
-                ", rent=" + rent +
-                ", availability=" + availability +
-                ", amenities='" + amenities + '\'' +
-                '}';
-    }
+    public Hostel getHostel() { return hostel; }
+    public void setHostel(Hostel hostel) { this.hostel = hostel; }
 }

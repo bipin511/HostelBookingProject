@@ -1,67 +1,37 @@
 package com.ey.response;
 
+
+
 public class RoomResponse {
     private Long roomId;
-    private String hostelName;
-    private String name;
-    private String roomType;
-    private double rent;
-    private boolean availability;
-    private String amenities;
+    private String type;
+    private Double rent;
+    private boolean available;
+    private String images;
+    private boolean occupied;
+    private Long hostelId;
 
-    public Long getRoomId() {
-        return roomId;
-    }
+    public RoomResponse() {}
 
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
-    }
+    // Getters & Setters
+    public Long getRoomId() { return roomId; }
+    public void setRoomId(Long roomId) { this.roomId = roomId; }
 
-    public String getHostelName() {
-        return hostelName;
-    }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public void setHostelName(String hostelName) {
-        this.hostelName = hostelName;
-    }
+    public Double getRent() { return rent; }
+    public void setRent(Double rent) { this.rent = rent; }
 
-    public String getName() {
-        return name;
-    }
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getImages() { return images; }
+    public void setImages(String images) { this.images = images; }
 
-    public String getRoomType() {
-        return roomType;
-    }
+    public boolean isOccupied() { return occupied; }
+    public void setOccupied(boolean occupied) { this.occupied = occupied; }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
-    }
-
-    public double getRent() {
-        return rent;
-    }
-
-    public void setRent(double rent) {
-        this.rent = rent;
-    }
-
-    public boolean isAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
-    public String getAmenities() {
-        return amenities;
-    }
-
-    public void setAmenities(String amenities) {
-        this.amenities = amenities;
-    }
+    public Long getHostelId() { return hostelId; }
+    public void setHostelId(Long hostelId) { this.hostelId = hostelId; }
 }
